@@ -18,27 +18,37 @@ import com.TestesFelipeGoncalves.Repository.ClienteRepository;
 import com.TestesFelipeGoncalves.Service.ClienteService;
 import com.TestesFelipeGoncalves.entity.Cliente;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
+	private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
 @Autowired
 private ClienteService clienteService;
 @Autowired
 private ClienteRepository clienteRepository;
+
 @PostMapping
-public ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente){
-	Cliente clienteSalvo=clienteRepository.save(cliente);
-	return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
+public ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente) {
+    logger.info("Recebendo solicitação para cadastrar cliente: {}", cliente);
+    Cliente clienteSalvo = clienteRepository.save(cliente);
+    logger.info("Cliente cadastrado com sucesso: {}", clienteSalvo);
+    return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
 }
 
 @GetMapping("/{id}")
-public ResponseEntity<Cliente>buscarClientePorId(@PathVariable Long id){
-	Optional<Cliente> cliente = clienteRepository.findById(id);
-	if(cliente.isPresent()) {
-		return ResponseEntity.ok(cliente.get());
-	}else {
-		return ResponseEntity.notFound().build();
-	}
+public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
+    logger.info("Recebendo solicitação para buscar cliente por ID: {}", id);
+    Optional<Cliente> cliente = clienteRepository.findById(id);
+    if (cliente.isPresent()) {
+        logger.info("Cliente encontrado: {}", cliente.get());
+        return ResponseEntity.ok(cliente.get());
+    } else {
+        logger.info("Cliente não encontrado para o ID: {}", id);
+        return ResponseEntity.notFound().build();
+    }
 }
 
 @PutMapping("/{id}")
