@@ -7,6 +7,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.1.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
+		
 	</parent>
 	<groupId>com.TestesFelipeGoncalves</groupId>
 	<artifactId>LocadoradeVeiculosApi</artifactId>
@@ -23,6 +24,7 @@
 	<version>2.9.2</version>
 </dependency>
 <dependency>
+  
 	<groupId>io.springfox</groupId>
 	<artifactId>springfox-swagger-ui</artifactId>
 	<version>2.9.2</version>
@@ -50,6 +52,12 @@
     <artifactId>spring-boot-starter</artifactId>
 </dependency>
 <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+<dependency>
+	
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-api</artifactId>
 </dependency>
