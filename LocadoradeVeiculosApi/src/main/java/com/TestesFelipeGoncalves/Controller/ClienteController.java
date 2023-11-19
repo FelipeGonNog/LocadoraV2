@@ -18,6 +18,8 @@ import com.TestesFelipeGoncalves.Repository.ClienteRepository;
 import com.TestesFelipeGoncalves.Service.ClienteService;
 import com.TestesFelipeGoncalves.entity.Cliente;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +33,7 @@ private ClienteService clienteService;
 private ClienteRepository clienteRepository;
 
 @PostMapping
+@Operation (summary = "Cadastra um cliente",description="Cadastra um cliente e salva o mesmo no banco de dados.")
 public ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente) {
     logger.info("Recebendo solicitação para cadastrar cliente: {}", cliente);
     Cliente clienteSalvo = clienteRepository.save(cliente);
@@ -39,6 +42,7 @@ public ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente) {
 }
 
 @GetMapping("/{id}")
+@Operation (summary = "Busca um cliente por id",description = "Busca um cliente em expecifico pelo Id no banco de dados.")
 public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
     logger.info("Recebendo solicitação para buscar cliente por ID: {}", id);
     Optional<Cliente> cliente = clienteRepository.findById(id);
@@ -52,14 +56,17 @@ public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
 }
 
 @PutMapping("/{id}")
-public Cliente editar(@PathVariable Long id, @RequestBody Cliente cliente) {
-	return clienteService.editar(cliente);
+@Operation (summary= "Edita um cliente por id",description = "Busca um cliente em especifico para edita-lo no banco de dados." )
+public ResponseEntity<Cliente> editar(@PathVariable Long id, @RequestBody Cliente cliente) {
+    Cliente clienteExistente = clienteService.editar(cliente);
+    return ResponseEntity.ok(clienteExistente);
 }
 @DeleteMapping("/{id}")
-public void excluir(@PathVariable Long id) {
-	clienteService.excluir(id);
-
-  }
+@Operation (summary= "Exclui um cliente por id",description = "Busca um cliente pelo id especifico para exclui-lo do banco de dados.")
+public ResponseEntity<Void> excluir(@PathVariable Long id) {
+    clienteService.excluir(id);
+    return ResponseEntity.noContent().build();
+}
 
 }
 //()
