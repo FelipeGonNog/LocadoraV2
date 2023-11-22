@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.TestesFelipeGoncalves.Repository.ClienteRepository;
 import com.TestesFelipeGoncalves.Service.ClienteService;
 import com.TestesFelipeGoncalves.entity.Cliente;
 
@@ -26,26 +25,28 @@ import org.slf4j.LoggerFactory;
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
+	
 	private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
 @Autowired
 private ClienteService clienteService;
-@Autowired
-private ClienteRepository clienteRepository;
+
 
 @PostMapping
 @Operation (summary = "Cadastra um cliente",description="Cadastra um cliente e salva o mesmo no banco de dados.")
+
 public ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente) {
     logger.info("Recebendo solicitação para cadastrar cliente: {}", cliente);
-    Cliente clienteSalvo = clienteRepository.save(cliente);
+    Cliente clienteSalvo = clienteService.cadastrar(cliente);
     logger.info("Cliente cadastrado com sucesso: {}", clienteSalvo);
     return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
 }
 
 @GetMapping("/{id}")
 @Operation (summary = "Busca um cliente por id",description = "Busca um cliente em expecifico pelo Id no banco de dados.")
+
 public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
     logger.info("Recebendo solicitação para buscar cliente por ID: {}", id);
-    Optional<Cliente> cliente = clienteRepository.findById(id);
+    Optional<Cliente> cliente = clienteService.buscarPorId(id);
     if (cliente.isPresent()) {
         logger.info("Cliente encontrado: {}", cliente.get());
         return ResponseEntity.ok(cliente.get());
@@ -57,12 +58,14 @@ public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
 
 @PutMapping("/{id}")
 @Operation (summary= "Edita um cliente por id",description = "Busca um cliente em especifico para edita-lo no banco de dados." )
+
 public ResponseEntity<Cliente> editar(@PathVariable Long id, @RequestBody Cliente cliente) {
-    Cliente clienteExistente = clienteService.editar(cliente);
+    Cliente clienteExistente = clienteService.editar(id,cliente);
     return ResponseEntity.ok(clienteExistente);
 }
 @DeleteMapping("/{id}")
 @Operation (summary= "Exclui um cliente por id",description = "Busca um cliente pelo id especifico para exclui-lo do banco de dados.")
+
 public ResponseEntity<Void> excluir(@PathVariable Long id) {
     clienteService.excluir(id);
     return ResponseEntity.noContent().build();

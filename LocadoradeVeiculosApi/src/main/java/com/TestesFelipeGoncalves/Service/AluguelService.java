@@ -23,14 +23,12 @@ public List <Aluguel> listarTodosAlugueis(){
 	return aluguelRepository.findAll();
 }
 
-	
 
  public Aluguel salvar(Aluguel aluguel) {
+	 validarRegistroExistente(aluguel.getId());
+	 validarCamposObrigatorios(aluguel);
 	 return aluguelRepository.save(aluguel);
  }
-public Aluguel editar(Aluguel aluguel) {
-	return aluguelRepository.save(aluguel);
-}
 
 public void excluir(Long id) {
 	aluguelRepository.deleteById(id);	
@@ -40,6 +38,8 @@ public List<Aluguel> listarAlugueisPorCliente(Long clienteId) {
 }
 
 public Aluguel editar(Long id, Aluguel aluguel) {
+	validarRegistroExistente(id);
+	validarCamposObrigatorios(aluguel);
     Optional<Aluguel> aluguelExistente = aluguelRepository.findById(id);
    
     
@@ -54,6 +54,20 @@ public Aluguel editar(Long id, Aluguel aluguel) {
 public List<Carro>listarCarrosAlugadosPorCliente(Long clienteId){
 	return carroRepository.findByClienteId(clienteId);
 }
+
+private void validarRegistroExistente(Long id) {
+    if (id != null && aluguelRepository.existsById(id)) {
+        throw new IllegalStateException("Já existe um aluguel cadastrado com o ID: " + id);
+    }
+}
+
+    private void validarCamposObrigatorios(Aluguel aluguel) {
+        if (aluguel.getCliente() == null) {
+            throw new IllegalArgumentException("O campo 'clienteId' é obrigatório.");
+        }
+}
+
+
 
 }
 

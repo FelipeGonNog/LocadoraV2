@@ -13,10 +13,20 @@ public class Cliente {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private long id;
 private String nome;
-private int cpf;
+private Long cpf;
 
 @OneToMany(mappedBy = "cliente")
 private List<Aluguel> alugueis;
+
+public Cliente() {
+	
+}
+public Cliente(long id, String nome, Long cpf, List<Aluguel> alugueis) {
+	this.id = id;
+	this.nome = nome;
+	this.cpf = cpf;
+	this.alugueis = alugueis;
+}
 
 public long getId() {
 	return id;
@@ -34,11 +44,11 @@ public void setNome(String nome) {
 	this.nome = nome;
 }
 
-public int getCpf() {
+public Long getCpf() {
 	return cpf;
 }
 
-public void setCpf(int cpf) {
+public void setCpf(Long cpf) {
 	this.cpf = cpf;
 }
 
